@@ -24,3 +24,5 @@ server.start((err) => {
   console.log('Server running on port 8000...')
 })
 
+module.exports = server
+
