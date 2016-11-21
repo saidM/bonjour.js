@@ -19,6 +19,20 @@ server.route({
   }
 })
 
+server.route({
+  method: 'POST',
+  path: '/translations/{locale}/{key}',
+  handler: (request, reply) => {
+    if (!request.payload) {
+      reply({ error: "Missing 'value' parameter" }).code(400)
+    } else {
+      Translator.create(request.params.locale, request.params.key, request.payload.value)
+      .then(data => reply(data).code(202))
+      .catch(err => reply({ error: err }).code(409))
+    }
+  }
+})
+
 server.start((err) => {
   if (err) throw err
   console.log('Server running on port 8000...')

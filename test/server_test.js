@@ -18,5 +18,19 @@ describe('Server', () => {
       request(server.listener).get('/translations/fr/hello.world').expect(200, done)
     })
   })
+  
+  describe('POST /translations/{locale}/{key}', () => {
+    it("returns 400 if the 'value' param is missing", (done) => {
+      request(server.listener).post('/translations/fr/unknown.key').expect(400, done)
+    })
+    
+    it('returns 409 if the match locale/key already exists in the database', (done) => {
+      request(server.listener).post('/translations/fr/hello.world').field('value', 'Bonjour').expect(409, done)
+    })
+
+    it('returns 202 if the translation was added to the database', (done) => {
+      request(server.listener).post('/translations/ar/hello.world').field('value', 'Salam').expect(202, done)
+    })
+  })
 })
 
