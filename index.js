@@ -1,6 +1,7 @@
 'use strict'
 
 const Hapi       = require('hapi'),
+      Joi        = require('joi'),
       server     = new Hapi.Server(),
       Translator = require('./lib/translator')
 
@@ -22,10 +23,13 @@ server.route({
 server.route({
   method: 'POST',
   path: '/translations/{locale}/{key}',
-  handler: (request, reply) => {
-    if (!request.payload) {
-      reply({ error: "Missing 'value' parameter" }).code(400)
-    } else {
+  config: {
+    validate: {
+      payload: {
+        value: Joi.string().required()
+      }
+    },
+    handler: (request, reply) => {
       Translator.create(request.params.locale, request.params.key, request.payload.value)
       .then(data => reply(data).code(202))
       .catch(err => reply({ error: err }).code(409))
@@ -36,10 +40,13 @@ server.route({
 server.route({
   method: 'PUT',
   path: '/translations/{locale}/{key}',
-  handler: (request, reply) => {
-    if (!request.payload) {
-      reply({ error: "Missing 'value' parameter" }).code(400)
-    } else {
+  config: {
+    validate: {
+      payload: {
+        value: Joi.string().required()
+      }
+    },
+    handler: (request, reply) => {
       Translator.update(request.params.locale, request.params.key, request.payload.value)
       .then(data => reply(data).code(200))
       .catch(err => reply({ error: err }).code(404))
