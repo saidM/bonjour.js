@@ -11,7 +11,7 @@ const chai = require('chai'),
 chai.use(chaiAsPromised)
 
 describe('Translator Service', () => {
-  before(() => helper.reset)
+  before(() => helper.reset())
 
   describe('get(locale, key)', () => {
     it('rejects the promise if the match locale/key does not exist', () => {

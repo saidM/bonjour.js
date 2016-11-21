@@ -6,7 +6,7 @@ const expect = require('chai').expect,
       helper = require('./test_helper')
 
 describe('Server', () => {
-  before(() => helper.reset)
+  before(() => helper.reset())
   after(() => server.stop)
 
   describe('GET /translations/{locale}/{key}', () => {
@@ -30,6 +30,20 @@ describe('Server', () => {
 
     it('returns 202 if the translation was added to the database', (done) => {
       request(server.listener).post('/translations/ar/hello.world').field('value', 'Salam').expect(202, done)
+    })
+  })
+  
+  describe('PUT /translations/{locale}/{key}', () => {
+    it("returns 400 if the 'value' param is missing", (done) => {
+      request(server.listener).put('/translations/fr/unknown.key').expect(400, done)
+    })
+    
+    it('returns 404 if the match locale/key does not already exists in the database', (done) => {
+      request(server.listener).put('/translations/unknown.locale/hello.world').field('value', 'Bonjour').expect(404, done)
+    })
+    
+    it('returns 200 if the translation was updated in the database', (done) => {
+      request(server.listener).put('/translations/fr/hello.world').field('value', 'Bonjour2').expect(200, done)
     })
   })
 })
