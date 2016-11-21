@@ -2,9 +2,11 @@
 
 const expect = require('chai').expect,
       request = require('supertest'),
-      server = require('../index')
+      server = require('../index'),
+      helper = require('./test_helper')
 
 describe('Server', () => {
+  before(() => helper.reset)
   after(() => server.stop)
 
   describe('GET /translations/{locale}/{key}', () => {
