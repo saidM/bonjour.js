@@ -1,7 +1,7 @@
 'use strict'
 
-const Hapi = require('hapi'),
-      server = new Hapi.Server(),
+const Hapi       = require('hapi'),
+      server     = new Hapi.Server(),
       Translator = require('./lib/translator')
 
 server.connection({
@@ -24,5 +24,6 @@ server.start((err) => {
   console.log('Server running on port 8000...')
 })
 
+// Export the server so we can use it in the test suite
 module.exports = server
 
