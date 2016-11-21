@@ -42,4 +42,14 @@ describe('Translator Service', () => {
       return expect(translator.update('fr', 'hello.world', 'Bonjour !')).to.eventually.become({ locale: 'fr', key: 'hello.world', value: 'Bonjour !' })
     })
   })
+  
+  describe('delete(locale, key)', () => {
+    it('rejects the promise if the match locale/key does not exist', () => {
+      return expect(translator.destroy('en', 'unknown.key')).to.be.rejected
+    })
+    
+    it('resolves the promise if the match locale/key exists and was removed from the database', () => {
+      return expect(translator.destroy('fr', 'hello.world')).to.eventually.become({ locale: 'fr', key: 'hello.world' })
+    })
+  })
 })

@@ -46,5 +46,15 @@ describe('Server', () => {
       request(server.listener).put('/translations/fr/hello.world').field('value', 'Bonjour2').expect(200, done)
     })
   })
+  
+  describe('DELETE /translations/{locale}/{key}', () => {
+    it('returns 404 if the match locale/key does not already exists in the database', (done) => {
+      request(server.listener).delete('/translations/unknown.locale/hello.world').expect(404, done)
+    })
+    
+    it('returns 200 if the translation was removed from the database', (done) => {
+      request(server.listener).delete('/translations/fr/hello.world').expect(200, done)
+    })
+  })
 })
 

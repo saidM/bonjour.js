@@ -47,6 +47,16 @@ server.route({
   }
 })
 
+server.route({
+  method: 'DELETE',
+  path: '/translations/{locale}/{key}',
+  handler: (request, reply) => {
+    Translator.destroy(request.params.locale, request.params.key)
+    .then(data => reply(data).code(200))
+    .catch(err => reply({ error: err }).code(404))
+  }
+})
+
 server.start((err) => {
   if (err) throw err
   console.log('Server running on port 8000...')
