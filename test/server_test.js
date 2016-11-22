@@ -8,6 +8,16 @@ const expect = require('chai').expect,
 describe('Server', () => {
   before(() => helper.reset())
   after(() => server.stop)
+  
+  describe('GET /translations/{locale}', () => {
+    it('returns 404 if the locale is not stored inside the database', (done) => {
+      request(server.listener).get('/translations/unknown.locale').expect(404, done)
+    })
+
+    it('returns 200 if the locale does exist', (done) => {
+      request(server.listener).get('/translations/fr').expect(200, done)
+    })
+  })
 
   describe('GET /translations/{locale}/{key}', () => {
     it('returns 404 if the match locale/key does not exist', (done) => {

@@ -12,6 +12,16 @@ server.connection({
 
 server.route({
   method: 'GET',
+  path: '/translations/{locale}',
+  handler: (request, reply) => {
+    Translator.get(request.params.locale)
+    .then(data => reply(data))
+    .catch(err => reply({ error: err }).code(404))
+  }
+})
+
+server.route({
+  method: 'GET',
   path: '/translations/{locale}/{key}',
   handler: (request, reply) => {
     Translator.get(request.params.locale, request.params.key)
