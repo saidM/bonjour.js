@@ -14,12 +14,27 @@ describe('Translator Service', () => {
   before(() => helper.reset())
 
   describe('get(locale, key)', () => {
-    it('rejects the promise if the match locale/key does not exist', () => {
-      return expect(translator.get('fr', 'unknown.key')).to.be.rejected
+    context('when there is a key param', () => {
+      it('rejects the promise if the match locale/key does not exist', () => {
+        return expect(translator.get('fr', 'unknown.key')).to.be.rejected
+      })
+
+      it('resolves the promise if the match locale/key does exist', () => {
+        return expect(translator.get('fr', 'hello.world')).to.eventually.become({ locale: 'fr', key: 'hello.world', value: 'Bonjour à tous !' })
+      })
     })
 
-    it('resolves the promise if the match locale/key does exist', () => {
-      return expect(translator.get('fr', 'hello.world')).to.eventually.become({ locale: 'fr', key: 'hello.world', value: 'Bonjour à tous !' })
+    context('when there is no key param', () => {
+      it('rejects the promise if the locale param does not exist in the database', () => {
+        return expect(translator.get('unknown.locale')).to.be.rejected
+      })
+
+      it('resolves the promise if the locale does exist', () => {
+        return expect(translator.get('fr')).to.eventually.become([
+          { locale: 'fr', key: 'hello.world', value: 'Bonjour à tous !' },
+          { locale: 'fr', key: 'how.are.you', value: 'Comment ça va ?' }
+        ])
+      })
     })
   })
 
