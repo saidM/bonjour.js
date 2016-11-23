@@ -5,11 +5,9 @@ const Hapi       = require('hapi'),
       server     = new Hapi.Server(),
       Translator = require('./lib/translator')
 
-const port = process.env.PORT || 8000
-
 server.connection({
   host: 'localhost',
-  port: port
+  port: process.env.PORT || 8000
 })
 
 server.route({
@@ -78,7 +76,7 @@ server.route({
 
 server.start((err) => {
   if (err) throw err
-  console.log(`Server running on port ${port}...`)
+  console.log('Server running at', server.info.uri)
 })
 
 // Export the server so we can use it in the test suite
