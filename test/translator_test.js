@@ -20,7 +20,7 @@ describe('Translator Service', () => {
       })
 
       it('resolves the promise if the match locale/key does exist', () => {
-        return expect(translator.get('fr', 'hello.world')).to.eventually.become({ locale: 'fr', key: 'hello.world', value: 'Bonjour à tous !' })
+        return expect(translator.get('fr', 'hello.world')).to.eventually.become({ 'hello.world': 'Bonjour à tous !' })
       })
     })
 
@@ -30,17 +30,17 @@ describe('Translator Service', () => {
       })
 
       it('resolves the promise if the locale does exist', () => {
-        return expect(translator.get('fr')).to.eventually.become([
-          { locale: 'fr', key: 'hello.world', value: 'Bonjour à tous !' },
-          { locale: 'fr', key: 'how.are.you', value: 'Comment ça va ?' }
-        ])
+        return expect(translator.get('fr')).to.eventually.become({
+          'hello.world': 'Bonjour à tous !',
+          'how.are.you': 'Comment ça va ?'
+        })
       })
     })
   })
 
   describe('create(locale, key, value)', () => {
     it('resolves the promise if the translation was added', () => {
-      return expect(translator.create('en', 'hello.world', 'Hello World!')).to.eventually.become({ locale: 'en', key: 'hello.world', value: 'Hello World!' })
+      return expect(translator.create('en', 'hello.world', 'Hello World!')).to.eventually.become({ 'hello.world': 'Hello World!' })
     })
     
     it('rejects the promise if the match locale/key already exists', () => {
@@ -54,7 +54,7 @@ describe('Translator Service', () => {
     })
     
     it('resolves the promise if the match locale/key exists and the value was updated', () => {
-      return expect(translator.update('fr', 'hello.world', 'Bonjour !')).to.eventually.become({ locale: 'fr', key: 'hello.world', value: 'Bonjour !' })
+      return expect(translator.update('fr', 'hello.world', 'Bonjour !')).to.eventually.become({ 'hello.world': 'Bonjour !' })
     })
   })
   
@@ -64,7 +64,7 @@ describe('Translator Service', () => {
     })
     
     it('resolves the promise if the match locale/key exists and was removed from the database', () => {
-      return expect(translator.destroy('fr', 'hello.world')).to.eventually.become({ locale: 'fr', key: 'hello.world' })
+      return expect(translator.destroy('fr', 'hello.world')).to.eventually.become({ deleted: true })
     })
   })
 })
